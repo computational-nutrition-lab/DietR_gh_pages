@@ -21,7 +21,7 @@ output: html_document
 
 This tutorial shows how to analyze ASA24 and NHANES data.
 
-## How to use
+### Get started
 
 1. Download the [whole repository of DietR](https://github.com/computational-nutrition-lab/DietR). It contains files and scripts used in this tutorial.
 
