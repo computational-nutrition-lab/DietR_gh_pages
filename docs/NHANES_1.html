@@ -11,7 +11,7 @@
 
 
 
-<title>Load and clean ASA24 data</title>
+<title>Load and clean NHANES data</title>
 
 <script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -294,94 +294,13 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Load and clean ASA24 data</h1>
+<h1 class="title toc-ignore">Load and clean NHANES data</h1>
 
 </div>
 
 
-<div id="what-this-script-does" class="section level3">
-<h3>What this script does:</h3>
-<ol style="list-style-type: decimal">
-<li>Use Metadata 1 to filter out individuals.</li>
-<li>Remove users that has only a small number of totals (days of record). - if you know which one to remove.<br />
-</li>
-<li>Look for outliers in your totals by nutrient consumed on each day.</li>
-</ol>
-<p>Name the path to DietR directory where input files are pulled.</p>
-<pre class="r"><code>  main_wd &lt;- &quot;~/GitHub/DietR&quot;
-  main_wd</code></pre>
-<pre><code>## [1] &quot;~/GitHub/DietR&quot;</code></pre>
-<p>Load the necessary functions</p>
-<pre class="r"><code>  source(paste(main_wd, &quot;/lib/specify_data_dir.R&quot;, sep=&quot;&quot;))
-  source(paste(main_wd, &quot;/lib/load_clean_ASA24.R&quot;, sep=&quot;&quot;))
-  source(paste(main_wd, &quot;/lib/format.file.R&quot;, sep=&quot;&quot;))</code></pre>
-<p>Define the path to items data in main_wd.</p>
-<pre class="r"><code>items_path &lt;- paste(main_wd, &quot;/eg_data/VVKAJ/VVKAJ_Items.csv&quot;, sep=&quot;&quot;)
-print(items_path)</code></pre>
-<pre><code>## [1] &quot;~/GitHub/DietR/eg_data/VVKAJ/VVKAJ_Items.csv&quot;</code></pre>
-</div>
-<div id="load-asa24-items-data" class="section level3">
-<h3>Load ASA24 Items data</h3>
-<p>Load items data which is in a csv format.</p>
-<pre class="r"><code>items_raw &lt;- read.csv(items_path, sep = &quot;,&quot;, header=T)</code></pre>
-<p>Show the first two lines of the items data.</p>
-<pre class="r"><code>head(items_raw, 2)</code></pre>
-<pre><code>##                                                                                                                                                                                                                                                                                                                                                                                                                                                                                RecallRecId.UserName.UserID.RecallNo.RecallAttempt.RecallStatus.IntakeStartDateTime.IntakeEndDateTime.ReportingDate.Lang.Occ_No.Occ_Time.Occ_Name.EatWith.WatchTVuseComputer.Location.FoodNum.FoodType.FoodSrce.CodeNum.FoodCode.ModCode.HowMany.SubCode.P ...
-## 1                                                                                                                                                                                                                 41fee4cf-783f-469b-aadf-62c7e2cd33a9\tVVKAJ101\t7bd05142-312e-4648-b1ac-fc258540af52\t1\t0\t2\t11/5/2021 0:00\t11/5/2021 23:59\t11/6/2021\t1\t1\t11/5/2021 7:00\t1\tNA\tNA\t1\t1\t1\tNA\t1\t92400000\t0\t9.6\t0\t30001\t297.6\t124.992\t0\t0.744\t30.83136\t265.93536\t0\t26.784\t0\t29.58144\t0\t2.976\t0.05952\t0\t26.784\t14.88\t8.928\t0.26784\t0.020832\t0.2976\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0.8928\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t7.05312\t0\t1\tSoft drink, NFS
-## 2 41fee4cf-783f-469b-aadf-62c7e2cd33a9\tVVKAJ101\t7bd05142-312e-4648-b1ac-fc258540af52\t1\t0\t2\t11/5/2021 0:00\t11/5/2021 23:59\t11/6/2021\t1\t1\t11/5/2021 7:00\t1\tNA\tNA\t1\t2\t1\tNA\t2\t57231250\t0\t1\t0\t10205\t104\t419.12\t9.36\t10.92\t75.92\t5.408\t0\t0\t0\t16.016\t10.088\t40.56\t17.992\t101.92\t307.84\t350.48\t298.48\t2.392\t0.416\t43.472\t0.208\t0.728\t0.832\t9.984\t1.04\t199.68\t179.92\t19.76\t326.56\t3.016\t447.2\t447.2\t5.2\t0\t1.04\t0\t142.48\t0.7696\t2.288\t0\t1.04\t0\t0\t0\t0\t0.00208\t0.00208\t0.80392\t0.20592\t6.032\t0.00312\t5.98936\t0.03744\t0.00104\t3.224\t3.05136\t0.17264\t0\t0\t0\t0\t0\t1.976\t29.952\t0\t3.016\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t2.7456\t2.652\t0.0936\t0.7384\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0.7384\t0\t0\t0\t0\t0\t6.0736\t0\t3.432\t0\t1\tCereal (Post Great Grains Double Pecan Whole Grain Cereal)</code></pre>
-<p>Save it as a .txt file.</p>
-<p>This will be saved in GitHub/DietR_gh_pages/ directory.</p>
-<pre class="r"><code>  write.table(items_raw, &quot;VVKAJ_Items.txt&quot;, sep=&quot;\t&quot;, row.names=F)</code></pre>
-<p>Special characters such as “’”, “,”, “%” may interfere correct data loading; thus, we replace them with an underscore “_“.</p>
-<p>This function can only take .txt files as input. Specify column(s) to be processed in the “columns” argument and the output file name in the outfn argument; “_f” stands for “formatted”.</p>
-<pre class="r"><code>  format.file(filename = &quot;VVKAJ_Items.txt&quot;,
-              columns  = &quot;Food_Description&quot;,
-              outfn    = &quot;VVKAJ_Items_f.txt&quot;)</code></pre>
-<!-- Add SampleID with a desired prefix, and save it as a txt file. SampleIDs are IDs unique to each combination of users and day.   -->
-<!-- ```{r} -->
-<!--   AddSampleIDtoItems(input.fn="VVKAJ_Items_f.txt", user.name="UserName", recall.no="RecallNo",  -->
-<!--                      prefix="vvkaj.", out.fn="VVKAJ_Items_f_id.txt") -->
-<!-- ``` -->
-<!-- Load the formatted Items file. -->
-<!-- ```{r} -->
-<!--   items_f_id <- read.table("VVKAJ_Items_f_id.txt", sep="\t", header=T) -->
-<!-- ``` -->
-<!-- A combination of the specified prefix and sequential number should be added. -->
-<!-- ```{r} -->
-<!--   head(items_f_id) -->
-<!-- ``` -->
-<!-- Ensure your items file has the expected dimensions (number of rows x number of columns, shown as number of obs. and number of variables) in the environment window of R Studio, or you can also check the dimension of items_f by using the dim() function. -->
-<!-- ```{r} -->
-<!--   dim(items_f_id) -->
-<!-- ``` -->
-<!-- ### <Optional> Use individuals_to_remove.txt to filter out users marked as Remove = yes. -->
-<!-- Load your metadata that has information about which UserName(s) to remove.  -->
-<!-- ```{r} -->
-<!-- ind_to_rm <- read.table("individuals_to_remove.txt", sep="\t", header=T) -->
-<!-- ``` -->
-<!-- Take a look. Metadata for this purpose (ind_to_rm) has UserName and which one to be removed: -->
-<!-- ```{r} -->
-<!--   ind_to_rm -->
-<!-- ``` -->
-<!-- Show which has "yes" in the "Remove" column.  -->
-<!-- ```{r} -->
-<!--   subset(ind_to_rm, Remove == "yes") -->
-<!-- ``` -->
-<!-- Remove the specified individuals.   -->
-<!-- The output will be saved as a text file with the specified name.  -->
-<!-- This assumes the usernames are in UserName column, and will print which user(s) will be removed.    -->
-<!-- ```{r} -->
-<!--   RemoveRows(data=items_f_id, metadata.file= ind_to_rm,  -->
-<!--              output.name= "VVKAJ_Items_f_id_s.txt") -->
-<!-- ``` -->
-<!-- Load the output for further processing. -->
-<!-- ```{r} -->
-<!--   items_f_id_s <- read.table("VVKAJ_Items_f_id_s.txt", header=T, sep="\t") -->
-<!-- ``` -->
-<!-- Show unique usernames in items_f_id_s and confirm "VVKAJ116" has been removed. -->
-<!-- ```{r} -->
-<!--   unique(items_f_id_s$UserName)   -->
-<!-- ``` -->
+<div id="load-and-clean-nhanes-items-data" class="section level3">
+<h3>Load and clean NHANES items data</h3>
 </div>
 
 

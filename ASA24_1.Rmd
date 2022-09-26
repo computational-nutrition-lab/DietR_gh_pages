@@ -4,7 +4,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(message=FALSE,warning=FALSE, cache=TRUE)
+knitr::opts_chunk$set(message=FALSE, warning=FALSE, cache=TRUE)
 ```
 
 ### What this script does:
@@ -27,14 +27,14 @@ Load the necessary functions
 
 Define the path to items data in main_wd.
 ```{r}
-items_path <- paste(main_wd, "/eg_data/VVKAJ/VVKAJ_Items.txt", sep="")
+items_path <- paste(main_wd, "/eg_data/VVKAJ/VVKAJ_Items.csv", sep="")
 print(items_path)
 ```
 
 ### Load ASA24 Items data
 Load items data which is in a csv format.
 ```{r}
-items_raw <- read.table(items_path, sep = "\t", header=T)
+items_raw <- read.csv(items_path, sep = ",", header=T)
 ```
 
 Show the first two lines of the items data.
@@ -44,19 +44,19 @@ head(items_raw, 2)
 
 Save it as a .txt file. 
 
-<!-- This will be saved in GitHub/DietR_gh_pages/ directory. -->
-<!-- ```{r} -->
-<!--   write.table(items_raw, "VVKAJ_Items.txt", sep="\t", row.names=F)  -->
-<!-- ``` -->
+This will be saved in GitHub/DietR_gh_pages/ directory.
+```{r}
+  write.table(items_raw, "VVKAJ_Items.txt", sep="\t", row.names=F)
+```
 
-<!-- Special characters such as "'", ",", "%" may interfere correct data loading; thus, # we replace them with an underscore "_".   -->
+Special characters such as "'", ",", "%" may interfere correct data loading; thus, we replace them with an underscore "_".
 
-<!-- This function can only take .txt files as input. Specify column(s) to be processed in the "columns" argument and the output file name in the outfn argument; "_f" stands for "formatted".   -->
-<!-- ```{r} -->
-<!--   format.file(filename = "VVKAJ_Items.txt", -->
-<!--               columns  = "Food_Description",  -->
-<!--               outfn    = "VVKAJ_Items_f.txt")  -->
-<!-- ``` -->
+This function can only take .txt files as input. Specify column(s) to be processed in the "columns" argument and the output file name in the outfn argument; "_f" stands for "formatted".
+```{r}
+  format.file(filename = "VVKAJ_Items.txt",
+              columns  = "Food_Description",
+              outfn    = "VVKAJ_Items_f.txt")
+```
 
 <!-- Add SampleID with a desired prefix, and save it as a txt file. SampleIDs are IDs unique to each combination of users and day.   -->
 <!-- ```{r} -->
