@@ -299,6 +299,28 @@ $(document).ready(function () {
 </div>
 
 
+<p>Name the path to DietR directory where input files are pulled.</p>
+<pre class="r"><code>  main_wd &lt;- &quot;~/GitHub/DietR&quot;
+  main_wd</code></pre>
+<pre><code>## [1] &quot;~/GitHub/DietR&quot;</code></pre>
+<p>Load the necessary functions</p>
+<pre class="r"><code>  source(paste(main_wd, &quot;/lib/specify_data_dir.R&quot;, sep=&quot;&quot;))
+  source(paste(main_wd, &quot;/lib/load_clean_ASA24.R&quot;, sep=&quot;&quot;))
+  source(paste(main_wd, &quot;/lib/format.file.R&quot;, sep=&quot;&quot;))</code></pre>
+<p>Define the path to items data in main_wd.</p>
+<pre class="r"><code>items_path &lt;- paste(main_wd, &quot;/testsheet.csv&quot;, sep=&quot;&quot;)
+print(items_path)</code></pre>
+<pre><code>## [1] &quot;~/GitHub/DietR/testsheet.csv&quot;</code></pre>
+<div id="load-asa24-items-data" class="section level3">
+<h3>Load ASA24 Items data</h3>
+<p>Load items data which is in a csv format.</p>
+<pre class="r"><code>items_raw &lt;- read.csv(items_path, sep = &quot;,&quot;, header=T)</code></pre>
+<p>Show the first two lines of the items data.</p>
+<pre class="r"><code>head(items_raw, 2)</code></pre>
+<pre><code>##   One Two Three
+## 1   1   5    AA
+## 2   2  10    BB</code></pre>
+</div>
 <div id="summarize-and-visualize-asa24-items-and-totals-data." class="section level3">
 <h3>Summarize and visualize ASA24 items and totals data.</h3>
 </div>

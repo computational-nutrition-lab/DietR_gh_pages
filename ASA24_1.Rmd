@@ -4,7 +4,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(message=FALSE, warning=FALSE, cache=TRUE)
+knitr::opts_chunk$set(echo=TRUE)
 ```
 
 ### What this script does:
@@ -42,7 +42,7 @@ Show the first two lines of the items data.
 head(items_raw, 2)
 ```
 
-Save it as a .txt file. 
+Save it as a .txt file.
 
 This will be saved in GitHub/DietR_gh_pages/ directory.
 ```{r}
@@ -58,63 +58,62 @@ This function can only take .txt files as input. Specify column(s) to be process
               outfn    = "VVKAJ_Items_f.txt")
 ```
 
-<!-- Add SampleID with a desired prefix, and save it as a txt file. SampleIDs are IDs unique to each combination of users and day.   -->
-<!-- ```{r} -->
-<!--   AddSampleIDtoItems(input.fn="VVKAJ_Items_f.txt", user.name="UserName", recall.no="RecallNo",  -->
-<!--                      prefix="vvkaj.", out.fn="VVKAJ_Items_f_id.txt") -->
-<!-- ``` -->
+Add SampleID with a desired prefix, and save it as a txt file. SampleIDs are IDs unique to each combination of users and day.
+```{r}
+  AddSampleIDtoItems(input.fn="VVKAJ_Items_f.txt", user.name="UserName", recall.no="RecallNo",
+                     prefix="vvkaj.", out.fn="VVKAJ_Items_f_id.txt")
+```
 
-<!-- Load the formatted Items file. -->
-<!-- ```{r} -->
-<!--   items_f_id <- read.table("VVKAJ_Items_f_id.txt", sep="\t", header=T) -->
-<!-- ``` -->
-
-
-<!-- A combination of the specified prefix and sequential number should be added. -->
-<!-- ```{r} -->
-<!--   head(items_f_id) -->
-<!-- ``` -->
-
-<!-- Ensure your items file has the expected dimensions (number of rows x number of columns, shown as number of obs. and number of variables) in the environment window of R Studio, or you can also check the dimension of items_f by using the dim() function. -->
-<!-- ```{r} -->
-<!--   dim(items_f_id) -->
-<!-- ``` -->
-
-<!-- ### <Optional> Use individuals_to_remove.txt to filter out users marked as Remove = yes. -->
-<!-- Load your metadata that has information about which UserName(s) to remove.  -->
-<!-- ```{r} -->
-
-<!-- ind_to_rm <- read.table("individuals_to_remove.txt", sep="\t", header=T) -->
-<!-- ``` -->
+Load the formatted Items file.
+```{r}
+  items_f_id <- read.table("VVKAJ_Items_f_id.txt", sep="\t", header=T)
+```
 
 
-<!-- Take a look. Metadata for this purpose (ind_to_rm) has UserName and which one to be removed: -->
-<!-- ```{r} -->
-<!--   ind_to_rm -->
-<!-- ``` -->
+A combination of the specified prefix and sequential number should be added.
+```{r}
+  head(items_f_id)
+```
 
-<!-- Show which has "yes" in the "Remove" column.  -->
-<!-- ```{r} -->
-<!--   subset(ind_to_rm, Remove == "yes") -->
+Ensure your items file has the expected dimensions (number of rows x number of columns, shown as number of obs. and number of variables) in the environment window of R Studio, or you can also check the dimension of items_f by using the dim() function.
+```{r}
+  dim(items_f_id)
+```
 
-<!-- ``` -->
+### <Optional> Use individuals_to_remove.txt to filter out users marked as Remove = yes.
+Load your metadata that has information about which UserName(s) to remove.
+```{r}
+ind_to_rm_path <- paste(main_wd, "/eg_data/VVKAJ/individuals_to_remove.txt", sep="")
+ind_to_rm <- read.table(ind_to_rm_path, sep="\t", header=T)
+```
 
-<!-- Remove the specified individuals.   -->
-<!-- The output will be saved as a text file with the specified name.  -->
-<!-- This assumes the usernames are in UserName column, and will print which user(s) will be removed.    -->
-<!-- ```{r} -->
-<!--   RemoveRows(data=items_f_id, metadata.file= ind_to_rm,  -->
-<!--              output.name= "VVKAJ_Items_f_id_s.txt") -->
-<!-- ``` -->
+Take a look. Metadata for this purpose (ind_to_rm) has UserName and which one to be removed:
+```{r}
+  ind_to_rm
+```
 
-<!-- Load the output for further processing. -->
-<!-- ```{r} -->
-<!--   items_f_id_s <- read.table("VVKAJ_Items_f_id_s.txt", header=T, sep="\t") -->
-<!-- ``` -->
+Show which has "yes" in the "Remove" column.
+```{r}
+  subset(ind_to_rm, Remove == "yes")
 
-<!-- Show unique usernames in items_f_id_s and confirm "VVKAJ116" has been removed. -->
-<!-- ```{r} -->
-<!--   unique(items_f_id_s$UserName)   -->
-<!-- ``` -->
+```
+
+Remove the specified individuals.
+The output will be saved as a text file with the specified name.
+This assumes the usernames are in UserName column, and will print which user(s) will be removed.
+```{r}
+  RemoveRows(data=items_f_id, metadata.file= ind_to_rm,
+             output.name= "VVKAJ_Items_f_id_s.txt")
+```
+
+Load the output for further processing.
+```{r}
+  items_f_id_s <- read.table("VVKAJ_Items_f_id_s.txt", header=T, sep="\t")
+```
+
+Show unique usernames in items_f_id_s and confirm "VVKAJ116" has been removed.
+```{r}
+  unique(items_f_id_s$UserName)
+```
 
 
